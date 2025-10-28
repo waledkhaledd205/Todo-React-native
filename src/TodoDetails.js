@@ -1,7 +1,7 @@
 import { useRoute } from "@react-navigation/native";
 import { View, Text, ScrollView } from "react-native";
 import { AntDesign, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
-import { styles } from "./styles"; // Assuming the unified styles file is imported here
+import { styles } from "./styles";
 
 const TodoDetails = () => {
   const { params } = useRoute();
@@ -28,7 +28,7 @@ const TodoDetails = () => {
           <FontAwesome5 
             name={todo.completed ? "check-circle" : "circle"}
             size={18}
-            color="white" // Color set to white for visibility on badge background
+            color="white" 
           />
 
           <Text style={styles.statusText}>

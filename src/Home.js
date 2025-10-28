@@ -1,12 +1,19 @@
+
+
+
+
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 import TodoForm from "./components/TodoForm";
 import Todos from "./components/Todos";
 import { useState } from "react";
-import { useTodos } from "./context/TodoContext";
+import { useSelector, useDispatch } from 'react-redux'; 
+import { selectAllTodos, deleteTodo, toggleTodo, clearAllTodos } from "./redux/taskSlice"; 
 
 const Home = () => {
-  const { todos, deleteTodo, toggleTodo } = useTodos();
+  const dispatch = useDispatch();
+  const todos = useSelector(selectAllTodos);
+  
   const [filter, setFilter] = useState("all");
 
   const getFilteredTodos = () => {
@@ -16,11 +23,13 @@ const Home = () => {
   };
 
   const filteredTodos = getFilteredTodos();
+  
   const clearTodos = () => {
-    setTodos([]);
-    AsyncStorage.removeItem("todos");
-
+    dispatch(clearAllTodos()); 
   };
+  
+  const handleDeleteTodo = (id) => dispatch(deleteTodo(id));
+  const handleToggleTodo = (id) => dispatch(toggleTodo(id));
 
   return (
     <View style={styles.container}>
@@ -45,7 +54,7 @@ const Home = () => {
                 : styles.filterText
             }
           >
-            All
+            All Tasks
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -63,7 +72,7 @@ const Home = () => {
                 : styles.filterText
             }
           >
-            Active
+            Pending
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -88,9 +97,12 @@ const Home = () => {
 
       <Todos
         todos={filteredTodos}
-        deleteTodo={deleteTodo}
-        toggleTodo={toggleTodo}
+        deleteTodo={handleDeleteTodo}
+        toggleTodo={handleToggleTodo}
       />
+       <TouchableOpacity onPress={clearTodos} style={styles.clearBtn}>
+         <Text style={styles.clearBtnText}>Wipe Slate Clean</Text>
+       </TouchableOpacity>
     </View>
   );
 };
